@@ -62,26 +62,42 @@ class Graphe(object): # classe abstraite
         self.histogrammeVecteur(vect, nombreGroupes)
 
     def constructionGraphe(self, listeDegres, N, V):
-        listeDegres.sort()
-        sortedList = listeDegres.copy()
-        finished = False
-        temp = 0
-        while not finished and temp < N:
-            i = np.random.randint(len(sortedList)-1)
-            j = np.random.randint(len(sortedList)-1)
-            val_i = sortedList[i]
-            val_j = sortedList[j]
-            if val_i != val_j and not self.estArete(val_i, val_j):
-                self.ajoutArete(val_i, val_j)
-                sortedList.remove(val_i)
-                sortedList.remove(val_j)
-            else:
-                temp+=1
-            if len(sortedList) == 0:
-                finished = True
-        print(V)
-        if self.m > V:
-            self.constructionGraphe(listeDegres, N, V)
+        if len(listeDegres) != self.n :
+            print("listeDegres n'a pas le bon nombre de sommets")
+            return 0
+
+        nbEchecs = 0
+        L = [i for i in range(self.n)]
+        d = listeDegres.copy()
+        print(d)
+        
+        while nbEchecs < N and len(L) != 0 :
+            i = random.randint(0, (len(L) - 1))
+            j = random.randint(0, (len(L) - 1))
+
+            if i != j and self.estArete(L[i],L[j]) == False :
+                self.ajoutArete(L[i], L[j])
+                d[L[i]] -= 1
+                d[L[j]] -= 1
+
+                iSupp = False
+
+                if d[L[i]] == 0 :
+                    del L[i]
+                    iSupp = True
+                
+                if i < j and iSupp == True:
+                    del L[j-1]
+                else :
+                    del L[j]
+                    
+                nbEchecs = 0
+            else :
+                nbEchecs += 1
+
+        if len(L) > V  :
+            G = self.constructionGraphe(listeDegres, N, V)
+        return 0
 
     def pareto(self, m, M):
         if m > 0 and M > 0:
