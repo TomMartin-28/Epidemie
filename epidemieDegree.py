@@ -37,7 +37,7 @@ class EpidemieDegree(GrapheMatrice):
         self.courbeProgression(l, self.tab[0], self.tab[1])
 
     def nombreContaminations(self):
-        for i in range(self.n): ceil
+        for i in range(self.n):
             self.nbContaminations[i] = int(self.q * self.listeDegree[i])
 
     def equitable(self):
